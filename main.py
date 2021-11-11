@@ -53,12 +53,12 @@ rom.load(0x3000, bytes(open("roms/PR_A64-4.ROM", "rb").read()))
 brkpts = []
 
 while not c.halted:
-    # if c.r[rpPC] in brkpts:
-    #     print("BRK at {:04X}".format(c.r[rpPC]))
-    #     print(c.r)
-    #     print(" --- ")
+    if c.r[rpPC] in brkpts:
+        print("BRK at {:04X}".format(c.r[rpPC]))
+        print(c.r)
+        print(" --- ")
 
-    s = c.step()
+    s = c.step(True)
     if s:
         print(s)
         print(c)

@@ -2,10 +2,9 @@ class genmem():
 
     def __init__(self, start, size, readonly):
         self.m = {}
-        self.ro = False
+        self.ro = readonly
         for i in range(start, start + size):
             self.m[i] = 0xFF
-            self.ro = readonly
 
     def __setitem__(self, addr, data):
         if not self.ro:

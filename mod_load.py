@@ -306,8 +306,8 @@ class load:
 
     def exsphl(self, disass=False):
         a = self.c.r[rpSP]
-        d = self.c.rdmem(a)
-        self.c.wrmem(a, self.c.r[rpHL])
+        d = self.c.rdmem16(a)
+        self.c.wrmem16(a, self.c.r[rpHL])
         self.c.r[rpHL] = d
         if not disass:
             return
@@ -315,8 +315,8 @@ class load:
 
     def exspix(self, disass=False):
         a = self.c.r[rpSP]
-        d = self.c.rdmem(a)
-        self.c.wrmem(a, self.c.r[rpIX])
+        d = self.c.rdmem16(a)
+        self.c.wrmem16(a, self.c.r[rpIX])
         self.c.r[rpIX] = d
         if not disass:
             return
@@ -324,8 +324,8 @@ class load:
 
     def exspiy(self, disass=False):
         a = self.c.r[rpSP]
-        d = self.c.rdmem(a)
-        self.c.wrmem(a, self.c.r[rpIY])
+        d = self.c.rdmem16(a)
+        self.c.wrmem16(a, self.c.r[rpIY])
         self.c.r[rpIY] = d
         if not disass:
             return
