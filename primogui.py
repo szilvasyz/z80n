@@ -49,13 +49,21 @@ class scr(genmem):
         self.photo.put(color, (x * m, y * m, x * m + m, y * m + m))
 
 
+class proinp(genmem):
+
+    def __getitem__(self, addr):
+        self.m[addr] ^= 0x20
+        return self.m[addr]
+
+
+
 def updateloop():
     global updateflag
     updateflag = True
     threading.Timer(0.1, updateloop).start()
 
 
-vid = scr(0xE800)
+vid = scr(0xE400)
 updateloop()
 
 c = cpu()
@@ -64,14 +72,17 @@ c = cpu()
 # Primo
 #
 rom = genmem(0x0000, 0x4000, True)
-ram = genmem(0x4000, 0xA800, False)
+ram = genmem(0x4000, 0xA400, False)
+inp = proinp(0x0000, 0x0100, False)
 c.addmem(rom)
 c.addmem(ram)
 c.addmem(vid)
-rom.load(0x0000, bytes(open("roms/PR_A64-1.ROM", "rb").read()))
-rom.load(0x1000, bytes(open("roms/PR_A64-2.ROM", "rb").read()))
-rom.load(0x2000, bytes(open("roms/PR_A64-3.ROM", "rb").read()))
-rom.load(0x3000, bytes(open("roms/PR_A64-4.ROM", "rb").read()))
+c.addinp(inp)
+rom.load(0x0000, bytes(open("roms/PROPRIMO.rom", "rb").read()))
+# rom.load(0x0000, bytes(open("roms/PR_A64-1.ROM", "rb").read()))
+# rom.load(0x1000, bytes(open("roms/PR_A64-2.ROM", "rb").read()))
+# rom.load(0x2000, bytes(open("roms/PR_A64-3.ROM", "rb").read()))
+# rom.load(0x3000, bytes(open("roms/PR_A64-4.ROM", "rb").read()))
 
 brkpts = []
 
