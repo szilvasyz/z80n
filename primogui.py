@@ -12,19 +12,19 @@ updateflag = False
 class scr(genmem):
     def __init__(self, start):
         self.root = tk.Tk()
-        self.label = tk.Label(text="")
-        self.label.pack()
-        self.photo = tk.PhotoImage(width=768, height=576)
-        self.canvas = tk.Canvas(self.root, width=960, height=624)
-        self.canvas.create_image(96, 24, image=self.photo, anchor=tk.NW)
+#        self.label = tk.Label(text="")
+#        self.label.pack()
+        self.photo = tk.PhotoImage(width=768, height=768)
+        self.canvas = tk.Canvas(self.root, width=770, height=770)
+        self.canvas.create_image(1, 1, image=self.photo, anchor=tk.NW)
         self.canvas.pack()
-        self.update_clock()
+#        self.update_clock()
         self.start = start
-        super().__init__(0, 0x1800, False)
+        super().__init__(0, 0x1C00, False)
 
     def __setitem__(self, addr, data):
         a = addr - self.start
-        if a in range(0x1800):
+        if a in range(0x2000):
             x = a >> 5
             y = (a & 0x1F) << 3
             for b in range(8):
@@ -52,8 +52,9 @@ class scr(genmem):
 class proinp(genmem):
 
     def __getitem__(self, addr):
-        self.m[addr] ^= 0x20
-        return self.m[addr]
+        a = addr & 0xFF
+        self.m[a] ^= 0x20
+        return self.m[a]
 
 
 
@@ -63,7 +64,7 @@ def updateloop():
     threading.Timer(0.1, updateloop).start()
 
 
-vid = scr(0xE400)
+vid = scr(0xE000)
 updateloop()
 
 c = cpu()
@@ -72,8 +73,13 @@ c = cpu()
 # Primo
 #
 rom = genmem(0x0000, 0x4000, True)
-ram = genmem(0x4000, 0xA400, False)
+ram = genmem(0x4000, 0xA000, False)
 inp = proinp(0x0000, 0x0100, False)
+
+for i in range(256):
+    inp[i] = 0xFE
+inp[0x20] = 0xFF
+
 c.addmem(rom)
 c.addmem(ram)
 c.addmem(vid)

@@ -50,8 +50,10 @@ class cpu():
 
     def rdinp(self, addr):
         for m in self.inp:
-            if addr in m.keys():
+            try:
                 return m[addr]
+            except KeyError:
+                pass
         return 0xFF
 
     def addout(self, outobj):
@@ -59,8 +61,10 @@ class cpu():
 
     def wrout(self, addr, data):
         for m in self.out:
-            if addr in m.keys():
+            try:
                 m[addr] = data
+            except KeyError:
+                pass
         return
 
     def addmem(self, memobj):
@@ -76,7 +80,6 @@ class cpu():
 
     def wrmem(self, addr, data):
         for m in self.mem:
-            # if addr in m.keys():
             try:
                 m[addr] = data
             except KeyError:
